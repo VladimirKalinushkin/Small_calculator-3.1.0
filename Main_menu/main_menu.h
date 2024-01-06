@@ -12,7 +12,6 @@ void help_out(Settings &Main_settings);
 
 void menu_to_set_Main_settings(Settings &Main_settings);
 
-void __set_mode_calculating(Settings &Main_settings);
 void __set_mode_output(Settings &Main_settings);
 void __set_mode_output_with_file(Settings &Main_settings);
 void __set_name_file_to_output(Settings &Main_settings);

@@ -32,12 +32,6 @@ BETTER_ENUM(
     settings = 's',
     print = ';');
 
-enum Modes_calculating {
-
-    arabian = 'a',
-    roman = 'r'
-
-};
 enum Modes_input {
 
     console = 'c',

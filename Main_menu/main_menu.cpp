@@ -26,9 +26,16 @@ void main_menu(Settings &Main_settings, TokenStream &Stream) {
         
         }
         catch (MainException &ex) {
-
+        
             errors_handler(ex, Main_settings);
         
+        }
+        catch (Roman_int::Exception &ex) {
+
+            ex.what();
+            MainException _ex("Приозошло исключение при обработке Римских чисел!\n");
+            errors_handler(_ex, Main_settings);
+
         }
     }
 }
@@ -94,8 +101,7 @@ void menu_to_set_Main_settings(Settings &Main_settings) {
 
     while (cin) {
 
-        cout << "Для настройки режима вычислений введите c, "
-             << "для настройки вывода файла - o, "
+        cout << "Для настройки вывода файла - o, "
              << "для режима вывода при вводе из файла - f, " 
              << "чтобы указать имя файла для вывода - n, "
              << "для выхода - e: " 
@@ -111,9 +117,6 @@ void menu_to_set_Main_settings(Settings &Main_settings) {
         try {
             switch (ch)
             {
-            case 'c':
-                __set_mode_calculating(Main_settings);
-                break;
             case 'o':
                 __set_mode_output(Main_settings);
                 break;
@@ -135,28 +138,6 @@ void menu_to_set_Main_settings(Settings &Main_settings) {
     }
 }
 
-void __set_mode_calculating(Settings &Main_settings) {
-    
-    cout << "Введите режим работы вычислений (полный режим с арабскими числами или ограниченный - с римскими): "
-         << char(Modes_calculating::arabian) << " / " << char (Modes_calculating::roman)
-         << '\n' << PROMT;
-
-    char mode;
-    cin >> mode;
-
-    switch(mode) {
-
-    case Modes_calculating::arabian:
-    case Modes_calculating::roman:
-        Main_settings.set_mode_calculating(Modes_calculating(mode));
-        break;
-
-    default:
-        throw MainException("Неправильный ввод!\n");
-
-    };
-
-}
 void __set_mode_output(Settings &Main_settings) {
 
     cout << "Введите режим вывода (только в консоль, в консоль и в файл, или только в файл): "

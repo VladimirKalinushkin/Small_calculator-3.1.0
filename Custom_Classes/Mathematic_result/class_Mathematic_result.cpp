@@ -25,7 +25,7 @@ void Mathematic_result::output_result_to_file(Settings &Main_settings) {
     Chrono::Time _now_time;
 
     file_to_output << '\t' << _now << ' ' << _now_time << ' '<< "\t-\t";
-    self_output_result(Main_settings, file_to_output);
+    file_to_output << _double_result << '\n';
 
     file_to_output.close(); 
 
@@ -33,8 +33,7 @@ void Mathematic_result::output_result_to_file(Settings &Main_settings) {
 void Mathematic_result::output_resuilt_to_console(Settings &Main_settings) {
 
     cout << PRINT_RESULT;
-
-    self_output_result(Main_settings, cout);
+    cout << _double_result << '\n';
 
 }
 
@@ -48,13 +47,4 @@ bool Mathematic_result::open_file_to_output(const string  name) {
 
     return true;
 
-}
-void Mathematic_result::self_output_result(Settings &Main_settings, ostream &os) {
-
-    if(Main_settings.get_mode_calculating() == Modes_calculating::arabian)
-        os << _double_result << '\n';
-
-    if(Main_settings.get_mode_calculating() == Modes_calculating::roman) 
-        os << _roman_int_result << '\n';
-    
 }

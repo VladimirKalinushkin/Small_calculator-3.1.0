@@ -92,6 +92,12 @@ double primary(TokenStream &Stream) {
             break;
 
         }
+        case Type_lexeme::Roman_int: {
+            Roman_int ret;
+            ret.set(oper.word);
+            return ret.as_int();
+            break;
+        }
         case '+':{
             return primary(Stream);
             break;}
