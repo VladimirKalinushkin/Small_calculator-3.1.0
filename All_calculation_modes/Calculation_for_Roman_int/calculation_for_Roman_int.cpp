@@ -11,7 +11,7 @@ void expression_Mathematic_handler_for_Roman_int(TokenStream &Stream, Mathematic
         result = Mathematic_result(_result);
 
     }
-    catch(Roman_int::exeption ex)
+    catch(Roman_int::Exception ex)
     {
         ex.what();
     }

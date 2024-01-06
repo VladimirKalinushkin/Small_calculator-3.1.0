@@ -12,10 +12,11 @@
         в объект корректное значение или вызвать метод clear() (очищает, только, если внутренне значение не пусто).
         Проверка осуществляется методом empty().
 
-    C версии 28.2.2023 - вызывается исключение Roman_int::exeption (наследник std::exeption)
+    C версии 28.2.2023 - вызывается исключение Roman_int::Exception (наследник std::exception)
         Обрабатывать его нужно:
              - при работе с арифметическими операторами
              - при конвертации в целое или из целого
+             - при установке и считывании числа (::set(string))
 
     При первичной инициализации объект помечается как пустой.
         empty() == true.
@@ -54,13 +55,13 @@ public:
     bool empty();
     void clear();
 
-    class exeption : public exception
+    class Exception : public exception
     {
     public:
-        exeption();
-        exeption(char *msg);
-        exeption(char *msg, char &bad_value);
-        exeption(char *msg, int &bad_value);
+        Exception();
+        Exception(char *msg);
+        Exception(char *msg, char &bad_value);
+        Exception(char *msg, int &bad_value);
 
         void what();
 
@@ -73,7 +74,7 @@ public:
 private:
     bool _empty;
 
-    bool check(const string &_r_i);
+    bool check(string &_r_i);
     int Roman_Simbol_to_int(char &c);
 };
 
@@ -85,20 +86,28 @@ Roman_int::Roman_int()
 Roman_int Roman_int::set(string _r_i)
 {
 
-    try
-    {
+    try {
+
         _empty = !(_r_i.size());
         if (_empty)
-            throw exeption("Передана пустая стрка! Возможно, на вход программы переданы неверные данные");
+            throw Exception("Передана пустая стрка! Возможно, на вход программы переданы неверные данные");
 
-        check(_r_i);
+        if(check(_r_i))
+            _internal_value = _r_i;
+        
+        else {
+            _internal_value = _r_i;
+            _empty = true;
+        }
+
+    }
+    catch (Exception &ex) {
 
         _internal_value = _r_i;
-    }
-    catch (exeption &ex)
-    {
-        ex.what();
         _empty = true;
+
+        throw Exception(ex);
+
     }
 
     return *this;
@@ -208,7 +217,7 @@ Roman_int &Roman_int::operator/=(Roman_int &r_i)
     int second_operand = r_i.as_int();
 
     if (second_operand == 0)
-        throw exeption("Деление на Нуль!");
+        throw Exception("Деление на Нуль!");
 
     *this = this->from_int(first_operand / second_operand);
     return *this;
@@ -218,7 +227,7 @@ int Roman_int::as_int()
 {
 
     if (this->empty())
-        throw exeption("Преобразование в целое невозможно! Ошибочное или пустое число!");
+        throw Exception("Преобразование в целое невозможно! Ошибочное или пустое число!");
 
     int ret = Roman_Simbol_to_int(this->_internal_value[((this->_internal_value.size()) - 1)]);
 
@@ -235,7 +244,7 @@ int Roman_int::as_int()
 Roman_int &Roman_int::from_int(int i)
 {
     if (i <= 0)
-        throw exeption("Число для переобразования должно быть больше нуля!", i);
+        throw Exception("Число для переобразования должно быть больше нуля!", i);
 
     string s_resuilt = "";
 
@@ -269,15 +278,34 @@ Roman_int &Roman_int::from_int(int i)
     return *this;
 }
 
-bool Roman_int::check(const string &_r_i)
+bool Roman_int::check(string &_r_i)
 {
-    for (auto c : _r_i)
-        if (!Roman_Simbol_to_int(c))
-        {
-            return false;
-        }
 
-    return true;
+    if(!_r_i.size())
+        return false;
+
+    string ret;
+
+    try {
+
+        for (char c : _r_i)
+            if (Roman_Simbol_to_int(c))
+                ret+= c;
+      
+        _r_i = ret;
+        return true;
+
+    }
+    catch(Exception &ex) {     
+        if(ret.size())
+            _r_i = ret;
+
+        else
+            _r_i.clear();
+
+        throw Exception(ex);
+    }
+
 }
 int Roman_int::Roman_Simbol_to_int(char &c)
 {
@@ -292,7 +320,7 @@ int Roman_int::Roman_Simbol_to_int(char &c)
     };
 
     if (!names_simbol.count(c))
-        throw exeption("Найден некорректный символ - ", c);
+        throw Exception("Найден некорректный символ - ", c);
 
     return names_simbol.at(c);
 }
@@ -306,25 +334,25 @@ void Roman_int::clear()
     _empty = (_internal_value.size()) ? false : true;
 }
 
-Roman_int::exeption::exeption()
+Roman_int::Exception::Exception()
 {
     message = "Неизвестная ошибка!\n";
 }
-Roman_int::exeption::exeption(char *msg)
+Roman_int::Exception::Exception(char *msg)
 {
     message = msg;
 }
-Roman_int::exeption::exeption(char *msg, char &bad_value)
+Roman_int::Exception::Exception(char *msg, char &bad_value)
 {
     message = msg;
     bad_value_char = &bad_value;
 }
-Roman_int::exeption::exeption(char *msg, int &bad_value)
+Roman_int::Exception::Exception(char *msg, int &bad_value)
 {
     message = msg;
     bad_value_int = &bad_value;
 }
-void Roman_int::exeption::what()
+void Roman_int::Exception::what()
 {
 
     if (message)
