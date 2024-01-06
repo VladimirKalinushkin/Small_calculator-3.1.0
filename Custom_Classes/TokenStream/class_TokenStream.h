@@ -33,6 +33,9 @@ private:
 
     Token get_new_Token();
     Token read_Token(istream &is);
+    Token read_number(istream &is, const char &first_digit);
+    Token read_word(istream& is, const char &first_simbol);
+
     void open_or_close_file_with_end();
     
     Token set_Token_type(const Token &buffer);

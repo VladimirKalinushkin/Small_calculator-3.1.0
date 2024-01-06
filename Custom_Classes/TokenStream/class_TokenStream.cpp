@@ -155,34 +155,45 @@ Token TokenStream::read_Token(istream &is) {
     Type_lexeme type = Type_lexeme::_values()[0];
     is >> ret.type;
 
-    if (isdigit(ret.type)) {
+    if (isdigit(ret.type))
+        return read_number(is, ret.type);
 
-        is.putback(ret.type);
-        is >> ret.value;
-        ret.type = Type_lexeme::number;
-        return ret;
-    
-    }
-
-    else if ( isalpha(ret.type) && ( isalpha( is.peek()) || !(ret.type == Type_lexeme::settings || ret.type == Type_lexeme::exit_simbol) ) ) {
-
-        is.putback(ret.type);
-        ret.word = get_word_from_string(is);
-        ret.type = Type_lexeme::word;
-        return ret;
-    
-    }
+    else if ( isalpha(ret.type) && ( isalpha( is.peek()) || !type._is_valid(ret.type) ))
+        return read_word(is, ret.type);
 
     else if ((type._is_valid(ret.type)))
         return ret;
     
-    else if(!is && is.peek() == EOF) {
+    else if(!is && is.peek() == EOF)
         throw MainException("Конец файла!", NOT_ARCHIVED_ERROR_INPUT_OF_END_FILE);
-    }
+    
     else
         throw MainException(ret, "Неправильный ввод!");
 
 }
+Token TokenStream::read_number(istream& is, const char &first_digit) {
+
+    Token ret;
+
+    is.putback(first_digit);
+    is >> ret.value;
+    ret.type = Type_lexeme::number;
+
+    return ret;
+
+}
+Token TokenStream::read_word(istream &is, const char &first_simbol) {
+
+    Token ret;
+
+    is.putback(first_simbol);
+    ret.word = get_word_from_string(is);
+    ret.type = Type_lexeme::word;
+
+    return ret;
+
+}
+
 void TokenStream::open_or_close_file_with_end() {
 
     if(Main_settings->get_mode_input() == Modes_input::file)
