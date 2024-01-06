@@ -107,6 +107,20 @@ Token TokenStream::set_Token_type(const Token &buffer) {
 
     string s = buffer.word;
     
+    try {
+    
+        Roman_int r_i;
+        Token ret;
+        r_i.set(s);
+
+        if(!r_i.empty()) {
+            ret.word = s;
+            ret.type = Type_lexeme::Roman_int;
+            return ret;
+        }
+    }
+    catch (Roman_int::Exception &ex) { ; }
+
     for(auto t : ConstantesStream)
         if(t.word == s)
             return t;

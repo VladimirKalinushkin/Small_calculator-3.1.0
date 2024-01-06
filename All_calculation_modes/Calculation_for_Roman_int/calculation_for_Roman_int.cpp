@@ -79,7 +79,7 @@ Roman_int primary_for_Roman_int(TokenStream &Stream)
 
     switch (oper.type) {
 
-        case Type_lexeme::word:{
+        case Type_lexeme::Roman_int:{
 
             ret.set(oper.word);
             if(ret.empty())
