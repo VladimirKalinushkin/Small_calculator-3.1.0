@@ -41,9 +41,14 @@ private:
     Token set_Token_type(const Token &buffer);
 
     ifstream _file_for_input;
+
+    // Файл создан внутри класса потока для "удобного" контроля его жизненного цикла
     
     Settings *Main_settings;
 
+    // Я привязал Настройки указателем к потоку, потому что они "жизненно необходимы"
+    // для работы потока.
+    // Поэтому стоит исключить возможность, чтобы настройки были созданы после потока
 };
 
 void check_error_and_close_file(ifstream &_file_for_input, Settings &Main_settings);

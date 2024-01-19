@@ -167,7 +167,12 @@ Token TokenStream::read_Token(istream &is) {
 
     Token ret;
     Type_lexeme type = Type_lexeme::_values()[0];
+    //Требования для BETTER_ENUM
+
     is >> ret.type;
+
+    //Будьте внимательны: порядок считывания лексемы важен!
+    //Типы лексем могут быть числами, поэтому считывание числа должно быть в первую очередь!
 
     if (isdigit(ret.type))
         return read_number(is, ret.type);
