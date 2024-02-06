@@ -1,6 +1,76 @@
 
 #include "class_MainException.h"
 
+
+Packet_exception_output::Packet_exception_output(const char *message) {
+    _message = message;
+}
+Packet_exception_output::Packet_exception_output(const Token &value, const char *message) {
+    _value = value;
+    _message = message;
+}
+
+ostream &operator<<(ostream &os, Token t)
+{
+
+    if (t.type)
+        os << "\t"
+           << "type:"
+           << "\t"
+           << t.type
+           << "\n"
+           << "\t"
+           << "value:"
+           << "\t"
+           << t.value
+           << "\n"
+           << "\t"
+           << "word:"
+           << "\t"
+           << t.word
+           << '\n';
+
+    else
+        os << "{ -- No Token -- }\n";
+
+    return os;
+}
+ostream &operator<<(ostream &os, Packet_exception_output p)
+{
+
+    //Был выбран XML-подобный синтаксис как наиболее удобочитаемый
+    os << '\n'
+       << "</ "
+       << p._now_Date
+       << " "
+       << p._now_Time
+       << '\n';
+
+    os << "value:"
+       << '\n'
+       << p._value;
+
+    os << "message:"
+       << '\n';
+
+    if (p._message)
+        os << "\t\""
+           << p._message
+           << "\""
+           << '\n';
+    else
+        os << "\t\""
+           << "Сообщения не передано!"
+           << "\""
+           << '\n';
+
+    os << ">"
+       << '\n';
+
+    return os;
+}
+
+
 MainException::MainException(bool not_archived) {
 
     *this = MainException();
@@ -56,74 +126,4 @@ void MainException::put_to_file(ofstream &file_to_output_log) {
         
     file_to_output_log << _value;
 
-}
-
-ostream &operator<<(ostream &os, Token t)
-{
-
-    if (t.type)
-        os << "\t"
-           << "type:"
-           << "\t"
-           << t.type
-           << "\n"
-           << "\t"
-           << "value:"
-           << "\t"
-           << t.value
-           << "\n"
-           << "\t"
-           << "word:"
-           << "\t"
-           << t.word
-           << '\n';
-
-    else
-        os << "{ -- No Token -- }\n";
-
-    return os;
-}
-
-ostream &operator<<(ostream &os, Packet_exception_output p)
-{
-
-    os << '\n'
-       << "</ "
-       << p._now
-       << " "
-       << p._this_time
-       << '\n';
-
-    os << "value:"
-       << '\n'
-       << p._value;
-
-    os << "message:"
-       << '\n';
-
-    if (p._message)
-        os << "\t\""
-           << p._message
-           << "\""
-           << '\n';
-    else
-        os << "\t\""
-           << "Сообщения не передано!"
-           << "\""
-           << '\n';
-
-    os << ">"
-       << '\n';
-
-    return os;
-}
-
-
-Packet_exception_output::Packet_exception_output(const char *message) {
-    _message = message;
-}
-
-Packet_exception_output::Packet_exception_output(const Token &value, const char *message) {
-    _value = value;
-    _message = message;
 }

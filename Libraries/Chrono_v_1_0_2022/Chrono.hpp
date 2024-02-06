@@ -13,13 +13,15 @@ namespace Chrono
 
         void now();
 
-        string get_this_Date_value();
+        string get_this_Time_value();
 
     private:
         int _hour;
         int _min;
         int _sec;
     };
+
+    ostream &operator<<(ostream &os, Time &tm);
 
     class Date
     {
@@ -57,7 +59,6 @@ namespace Chrono
         int _month;
         int _year;
         int _day_of_week;
-        // bool _is_error = false;
 
         void error_output(string message);
         Date add_minus_month(int number_month);
@@ -74,8 +75,22 @@ namespace Chrono
         bool operator!=(const Date &d);
     };
 
-    ostream &operator<<(ostream &os, Time &tm);
-    ofstream &operator<<(ofstream &ofs, Time &tm);
+    int GetMonthDay(int year, int month);
+    bool is_leap_year(int year);
+
+    long int get_zero_s_century_length(const int &y, const int &zero_s_year);
+    long int get_century_s_length(const int &y, const int &zero_s_year);
+    long int get_last_century_s_length(const int &y, const int &zero_s_year);
+    long int get_last_year_length(const int &y, const int &m);
+
+    int get_year_in_zero_s_century(long int &number_day, const int &zero_s_year);
+    int get_century(int &year, long int &number_day, const int &zero_s_year);
+    int get_year_in_last_century(int &year, long int &number_day, const int &zero_s_year);
+    int get_year(long int &number_day, const int &zero_s_year);
+    int get_month(long int &number_day, const int &year);
+
+    ostream &operator<<(ostream &os, Date &Dt);
+    Date &operator>>(istream &is, Date &Dt);
 
     //
 
@@ -107,41 +122,17 @@ namespace Chrono
         this->_min = ltm->tm_min;
         this->_sec = ltm->tm_sec;
     }
-    string Time::get_this_Date_value()
+    string Time::get_this_Time_value()
     {
         return to_string(_hour) + ":" + to_string(_min) + ":" + to_string(_sec);
     }
 
     ostream &operator<<(ostream &os, Time &tm)
     {
-        return os << tm.get_this_Date_value();
+        return os << tm.get_this_Time_value();
     }
-    ofstream &operator<<(ofstream &ofs, Time &tm)
-    {
-        ofs << tm.get_this_Date_value();
 
-        return ofs;
-    }
     //
-
-    int GetMonthDay(int year, int month);
-    bool is_leap_year(int year);
-
-    long int get_zero_s_century_length(const int &y, const int &zero_s_year);
-    long int get_century_s_length(const int &y, const int &zero_s_year);
-    long int get_last_century_s_length(const int &y, const int &zero_s_year);
-    long int get_last_year_length(const int &y, const int &m);
-
-    int get_year_in_zero_s_century(long int &number_day, const int &zero_s_year);
-    int get_century(int &year, long int &number_day, const int &zero_s_year);
-    int get_year_in_last_century(int &year, long int &number_day, const int &zero_s_year);
-    int get_year(long int &number_day, const int &zero_s_year);
-    int get_month(long int &number_day, const int &year);
-
-    ostream &operator<<(ostream &os, Date &Dt);
-    Date &operator>>(istream &is, Date &Dt);
-
-    ofstream &operator<<(ofstream &ofs, Date &Dt);
 
     Date::Date()
     {
@@ -594,14 +585,6 @@ namespace Chrono
         return d;
     }
 
-    ofstream &operator<<(ofstream &ofs, Date &d)
-    {
-
-        ofs << d.day() << '.' << d.month() << '.' << d.year();
-
-        return ofs;
-    }
-
     bool Date::operator>(const Date &d)
     {
 
@@ -632,4 +615,5 @@ namespace Chrono
 
         return !(*this == d);
     }
+
 }

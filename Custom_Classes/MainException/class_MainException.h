@@ -3,15 +3,21 @@ class Packet_exception_output
 {
 
 public:
-    Chrono::Date _now;
-    Chrono::Time _this_time;
+    Chrono::Date _now_Date;
+    Chrono::Time _now_Time;
+
     Token _value;
     const char *_message = NULL;
 
     Packet_exception_output() {}
     Packet_exception_output(const char *message);
     Packet_exception_output(const Token &value, const char *message);
+
 };
+
+ostream &operator<<(ostream &os, Packet_exception_output p);
+ostream &operator<<(ostream &os, Token t);
+
 
 class MainException : public exception
 {
@@ -34,5 +40,3 @@ private:
     bool _not_archived = false;
 };
 
-ostream &operator<<(ostream &os, Token t);
-ostream &operator<<(ostream &os, Packet_exception_output p);
