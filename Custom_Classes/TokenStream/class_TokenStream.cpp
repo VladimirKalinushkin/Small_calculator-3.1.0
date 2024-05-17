@@ -210,7 +210,7 @@ Token TokenStream::read_Token_from_file() {
         open_file_for_input();
 
     // Сразу же проверяем, нет ли конца файла чтобы сбросить обработку выше и не заниматься ей тут
-    close_file_for_input_with_end();
+    close_file_for_input();
     get_message_of_errors_file_for_input();
 
     if(_file_for_input.is_open())
@@ -227,7 +227,7 @@ void TokenStream::open_file_for_input() {
         _file_for_input.open(Main_settings->get_name_file_to_input());
 
 }
-void TokenStream::close_file_for_input_with_end() {
+void TokenStream::close_file_for_input() {
     
     bool file_must_be_closed = ( _file_for_input.fail() ||
                                  _file_for_input.bad() ||

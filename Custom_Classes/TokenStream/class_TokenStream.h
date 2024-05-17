@@ -49,7 +49,7 @@ private:
 
     Token read_Token_from_file();
     void open_file_for_input();
-    void close_file_for_input_with_end();
+    void close_file_for_input();
     void get_message_of_errors_file_for_input(); // В том числе и ошибки конца файла
     
 };
